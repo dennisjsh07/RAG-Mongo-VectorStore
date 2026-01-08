@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import streamlit as st
 import re
 from pymongo import MongoClient
-from langchain_community import document_loaders
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
@@ -39,4 +39,20 @@ except Exception as e:
 
 collection = client[DB_NAME][COLLECTION_NAME]
 
+# Embeddings + LLM
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+llm = ChatOpenAI(model="gpt-4o", temperature=0, streaming=True)
+
+
+# load and clean
+def clean_text(text):
+    text = re.sub(r"\n+", "\n", text)
+    text = re.sub(r"Page \d+", "", text)
+    return text.strip()
+
+
+def ingest_pdf(file_path):
+    loader = PyPDFLoader(file_path)
+    docs = loader.load()
