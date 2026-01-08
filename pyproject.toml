@@ -10,5 +10,6 @@ dependencies = [
     "langchain-openai>=1.1.6",
     "pymongo>=4.15.5",
     "pypdf>=6.5.0",
+    "python-dotenv>=1.2.1",
     "streamlit>=1.52.2",
 ]

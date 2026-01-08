@@ -1933,6 +1933,7 @@ dependencies = [
     { name = "langchain-openai" },
     { name = "pymongo" },
     { name = "pypdf" },
+    { name = "python-dotenv" },
     { name = "streamlit" },
 ]
 
@@ -1943,6 +1944,7 @@ requires-dist = [
     { name = "langchain-openai", specifier = ">=1.1.6" },
     { name = "pymongo", specifier = ">=4.15.5" },
     { name = "pypdf", specifier = ">=6.5.0" },
+    { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "streamlit", specifier = ">=1.52.2" },
 ]
 

@@ -4,3 +4,4 @@ langchain-openai
 pypdf 
 pymongo 
 streamlit 
+python-dotenv
