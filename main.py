@@ -18,6 +18,7 @@ st.title("📄 PDF RAG Chatbot (MongoDB + GPT-4o)")
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME")
 COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+VECTOR_INDEX = os.getenv("VECTOR_INDEX")
 
 if not MONGO_URI:
     st.error("MONGODB URI not found in environment variables")
@@ -74,10 +75,33 @@ def ingest_pdf(file_path):
                 "metaData": {
                     "page": chunk.metadata.get("page"),
                     "source": file_path,
-                    "chunk_id": i
-                }
+                    "chunk_id": i,
+                },
             }
         )
 
 
+def vector_search(query, k=4):
+    query_embedding = embeddings.embed_query(query)
 
+    pipeline = [
+        {
+            "$vector_search": {
+                "index": VECTOR_INDEX,
+                "path": "embedding",
+                "queryVector": query_embedding,
+                "numCandidates": 100,
+                "limit": k,
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "text": 1,
+                "metadata": 1,
+                "score": {"$meta": "vectorSearchScore"},
+            }
+        },
+    ]
+
+    return list(collection.aggregate(pipeline))
