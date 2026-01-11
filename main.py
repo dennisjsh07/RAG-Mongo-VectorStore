@@ -66,7 +66,7 @@ def ingest_pdf(file_path):
     chunks = splitter.split_documents(docs)
 
     for i, chunk in enumerate(chunks):
-        embedding = embeddings.embed_query(chunk)
+        embedding = embeddings.embed_query(chunk.page_content)
 
         collection.insert_one(
             {
@@ -122,3 +122,39 @@ Question:
 {query}
 """
     return llm.stream(prompt)
+
+
+# ----------- UI ----------------
+uploaded_file = st.file_uploader("Upload a PDF", type=["pdf"])
+
+if uploaded_file:
+    with open(uploaded_file.name, "wb") as f:
+        f.write(uploaded_file.read())
+
+    if st.button("📥 Ingest PDF"):
+        with st.spinner("Ingesting PDF..."):
+            ingest_pdf(uploaded_file.name)
+        st.success("PDF ingested successfully!")
+
+st.divider()
+
+query = st.text_input("Ask a question about the PDF")
+
+submit = st.button("🔍 Submit")
+
+if submit and query:
+    results = vector_search(query)
+
+    contexts = [r["text"] for r in results]
+
+    st.subheader("🤖 Answer")
+    answer_container = st.empty()
+
+    full_answer = ""
+    for chunk in generate_answer(query, contexts):
+        full_answer += chunk.content
+        answer_container.markdown(full_answer)
+
+    st.subheader("📚 Sources")
+    for r in results:
+        st.caption(f"Page {r['metadata'].get('page')} — Score: {round(r['score'], 3)}")
