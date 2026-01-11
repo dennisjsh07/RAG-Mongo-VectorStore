@@ -56,3 +56,28 @@ def clean_text(text):
 def ingest_pdf(file_path):
     loader = PyPDFLoader(file_path)
     docs = loader.load()
+
+    for d in docs:
+        d.page_content = clean_text(d.page_content)
+        print(d.page_content)
+
+    splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
+    chunks = splitter.split_documents(docs)
+
+    for i, chunk in enumerate(chunks):
+        embedding = embeddings.embed_query(chunk)
+
+        collection.insert_one(
+            {
+                "text": chunk.page_content,
+                "embedding": embedding,
+                "metaData": {
+                    "page": chunk.metadata.get("page"),
+                    "source": file_path,
+                    "chunk_id": i
+                }
+            }
+        )
+
+
+
