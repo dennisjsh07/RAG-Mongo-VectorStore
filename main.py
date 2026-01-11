@@ -105,3 +105,20 @@ def vector_search(query, k=4):
     ]
 
     return list(collection.aggregate(pipeline))
+
+
+def generate_answer(query, contexts):
+    context_text = "\n\n".join(contexts)
+
+    prompt = f"""
+You are a helpful assistant.
+Answer ONLY using the context below.
+If the answer is not found, say "Not found in the document."
+
+Context:
+{context_text}
+
+Question:
+{query}
+"""
+    return llm.stream(prompt)
