@@ -86,7 +86,7 @@ def vector_search(query, k=4):
 
     pipeline = [
         {
-            "$vector_search": {
+            "$vectorSearch": {
                 "index": VECTOR_INDEX,
                 "path": "embedding",
                 "queryVector": query_embedding,
@@ -155,6 +155,9 @@ if submit and query:
         full_answer += chunk.content
         answer_container.markdown(full_answer)
 
+"""
     st.subheader("📚 Sources")
     for r in results:
         st.caption(f"Page {r['metadata'].get('page')} — Score: {round(r['score'], 3)}")
+
+"""
