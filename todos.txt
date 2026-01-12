@@ -1,0 +1,6 @@
+1. check why some of the codes like eg:  clean_text are given, all of them are commented in decode.ipynb file
+2. can chat_prompt_template and retrieval_chain be used for this project
+3. How is the security ensured since there were already 5 documents inserted in vector store through decode.ipynbfile and 
+- through streamlit another 5 docs were injected so how is the application performing seperation of documents.
+4. since there were already some relevant docs inserted. can the data be received without ingesting the file in each session.
+5. Modularise the codes
