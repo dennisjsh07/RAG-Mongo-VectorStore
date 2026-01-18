@@ -1,6 +1,7 @@
 langchain
 langchain_community
 langchain-openai
+langchain-mongodb
 pypdf 
 pymongo 
 streamlit 
