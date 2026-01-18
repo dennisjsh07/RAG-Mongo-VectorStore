@@ -1,8 +1,4 @@
-2. can chat_prompt_template and retrieval_chain be used for this project
-4. since there were already some relevant docs inserted. can the data be received without ingesting the file in each session.
 5. Modularise the filestructure
-6. Imporve the retreival score
 7. ask GPT why the llm gave a answer from the chunk which has a higher distance 0.65 rather than the chunk with a 
 - lower distance 0.64
-8. send only the chunks with a good score as context to llm
 9. How do i check the tokens sent to the llm?
